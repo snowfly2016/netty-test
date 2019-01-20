@@ -1,0 +1,57 @@
+group 'com.test.netty'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12';
+    compile("io.netty:netty-all:4.1.10.Final",
+            "com.google.protobuf:protobuf-java:3.6.1",
+    "com.google.protobuf:protobuf-java-util:3.6.1",
+    "org.apache.thrift:libthrift:0.11.0")
+    compile 'io.grpc:grpc-netty-shaded:1.18.0'
+    compile 'io.grpc:grpc-protobuf:1.18.0'
+    compile 'io.grpc:grpc-stub:1.18.0'
+}
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.5'
+    }
+}
+
+protobuf {
+    //这个参数很关键
+    generateProtoTasks.generatedFilesBaseDir = 'src'
+
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.5.1-1"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.18.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {
+                // 改grpc的名字
+                setOutputSubDir 'java'
+
+            }
+        }
+    }
+
+}
+
