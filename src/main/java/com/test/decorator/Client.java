@@ -2,6 +2,10 @@ package com.test.decorator;
 
 public class Client {
 
+    /**
+     * Java IO 使用的装饰模式
+     * @param args
+     */
     public static void main(String[] args) {
         Component component = new ConcreteDecorator2(new ConcreteDecorator1(new ConcreteComponent()));
         component.doSomthing();
