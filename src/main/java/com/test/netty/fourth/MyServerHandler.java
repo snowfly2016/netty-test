@@ -22,6 +22,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 
         if(evt instanceof IdleStateEvent){
+
             IdleStateEvent event = (IdleStateEvent) evt;
 
             String eventType = null;

@@ -10,6 +10,8 @@ public class MyServer {
 
     /**
      * 客户端发送信息给服务端，服务端推送信息给客户端
+     * 基于tcp双向通信
+     *
      * @param args
      * @throws Exception
      */

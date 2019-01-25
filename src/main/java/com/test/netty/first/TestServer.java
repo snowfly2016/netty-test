@@ -19,16 +19,26 @@ public class TestServer {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception{
+        //接受连接
         EventLoopGroup bossGroup = new NioEventLoopGroup();
+        //处理连接
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+            //服务器启动类 简化netty服务器的创建工作
             ServerBootstrap serverBootstrap = new ServerBootstrap();
+            //属性的装配 方法链编程
             serverBootstrap.group(bossGroup,workerGroup)
                     .channel(NioServerSocketChannel.class)
+                    // workergroup -- childHandler 处理逻辑
+                    // bossGroup -- handler
                     .childHandler(new TestServerInitializer());
+            //服务器启动
             ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();
+            //
             channelFuture.channel().closeFuture().sync();
+
         }finally {
+            //关闭操作
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
