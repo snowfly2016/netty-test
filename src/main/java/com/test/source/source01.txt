@@ -1,0 +1,19 @@
+1.分析、记录笔记、关注核心流程
+
+EventLoopGroup bossGroup = new NioEventLoopGroup();
+EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+ThreadPerTaskExecutor 使用的是命令模式 command、代理模式
+
+线程本身的创建、线程本身任务的执行 解耦
+
+Executor doc阅读 组合多线程
+
+tag interface /mark interface 约定的特性
+
+channelFuture源码分析
+
+Future源码分析
+
+
+
