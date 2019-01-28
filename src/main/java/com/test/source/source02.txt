@@ -1,0 +1,19 @@
+分析源码不是为了分析而分析，价值在于这么设计背后的真实原理？
+
+为何有两个EventLoopGroup？
+
+channel 中是NioServerSocketChannel如何封装Java的NIO的？为何这样设计呢？
+
+Reactor模式解析  反应器模式
+
+Proactor模式 网络编程
+
+netty整体架构是reactor模式的完整体现
+
+Responsive Design 响应式设计
+
+Scalable IO in Java Doug Lea
+
+Reactor Douglas
+
+netty3 netty4区别？
