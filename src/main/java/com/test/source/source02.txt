@@ -51,10 +51,40 @@ Reactor模式的流程
 6.initiation dispatcher会回调事件处理器的handle_events回调方法来执行特定于应用的功能（开发者自己所编写功能），从而响应这个事件，所发生的事件类型可以作为该方法的参数并被该方法内部使用来执行额外的特定于服务的分离与分发。
 
 
-
+****************************************************
 channel何时被创建？channelPipeline何时被创建？
 Channel p = channel.pipeline(); AbstractChannel 定义的；创建父类时生成的
 两者之间的对应关系及设计模式？
+
+****************************************************
+ChannelOption 设置tcp属性等 ，不维护value，只维护key    配置与一个channel相关channelConfig的网络层的基本配置
+    AbstractConstants
+    Constant id() name() ConstantPool 创建并管理一些常量
+AttributeKey 一个请求从接受到处理，在一些中间环节需要加入自定义的业务数据，在下一个环节取出自定义的业务数据，数据的共享
+    Attribute
+    AttributeMap
+
+1.Channel/ChannelPipeline/ChannelHandleContext 三者关系？ ChannelHandleContext是channelHandle与ChannelPipeline之间交互的桥梁和纽带
+ChannelPipeline 本身是一个与channel关联的容器对象，存放的是一个一个的ChannelHandleContext对象，ChannelHandleContext对象内面存放的是我们所编写的或者netty内置所提供的一个有一个对象ChannelHandle对象，ChannelPipeline真正存放的并不是channelHandle，而使ChannelHandleContext，ChannelHandleContext是netty帮我们创建的。
+
+2.ChannelContext attr方法 和 Channel attr方法 之间的关系及放置属性的作用域有什么不同
+
+ChannelInitializer 一个便捷对象；按照顺序添加handle
+
+FastThreadLocal
+
+入栈、出栈处理器分离 DefaultChannelHandleContext 类的构造方法 直接或间接实现对应的方法
+
+pipeline.addLast()方法
+
+
+
+
+
+
+
+
+
 
 
 
