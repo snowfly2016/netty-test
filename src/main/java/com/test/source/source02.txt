@@ -68,6 +68,9 @@ AttributeKey 一个请求从接受到处理，在一些中间环节需要加入�
 ChannelPipeline 本身是一个与channel关联的容器对象，存放的是一个一个的ChannelHandleContext对象，ChannelHandleContext对象内面存放的是我们所编写的或者netty内置所提供的一个有一个对象ChannelHandle对象，ChannelPipeline真正存放的并不是channelHandle，而使ChannelHandleContext，ChannelHandleContext是netty帮我们创建的。
 
 2.ChannelContext attr方法 和 Channel attr方法 之间的关系及放置属性的作用域有什么不同
+ 4.1以后作用域相同
+
+Netty4.1
 
 ChannelInitializer 一个便捷对象；按照顺序添加handle
 
@@ -77,15 +80,74 @@ FastThreadLocal
 
 pipeline.addLast()方法
 
+callHandlerAdded0(...)
+
+initChannel(C ch)  注册后为何会被移除？ 因为该方法只是一个封装，不是真正的handle
 
 
 
+class Channel{
+    private ServerSocketChannelConfig config;
+
+    .... attributes;
+}
+
+随机和轮询在样本足够大的情况下，是有意义的。
+
+SingleThreadEventExector
 
 
 
+future promise 关系？？
 
 
+register(EventLoop eventLoop, final ChannelPromise promise)
+if (eventLoop.inEventLoop()) {
+    register0(promise);
+} else {
+    try {
+        eventLoop.execute(new Runnable() {
+            @Override
+            public void run() {
+                register0(promise);
+            }
+        });
+    } catch (Throwable t) {
+        logger.warn(
+                "Force-closing a channel whose registration task was not accepted by an event loop: {}",
+                AbstractChannel.this, t);
+        closeForcibly();
+        closeFuture.setClosed();
+        safeSetFailure(promise, t);
+    }
+}
 
+AbstractNioChannel
 
+protected void doRegister() throws Exception {
+boolean selected = false;
+for (;;) {
+    try {
+        selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
+        return;
+    } catch (CancelledKeyException e) {
+        if (!selected) {
+            // Force the Selector to select now as the "canceled" SelectionKey may still be
+            // cached and not removed because no Select.select(..) operation was called yet.
+            eventLoop().selectNow();
+            selected = true;
+        } else {
+            // We forced a select operation on the selector before but the SelectionKey is still cached
+            // for whatever reason. JDK bug ?
+            throw e;
+        }
+    }
+}
+}
 
-
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+1.一个EventLoopGroup当中会包含一个或多个EventLoop。
+2.一个EventLoop在它的整个生命周期当中只会与唯一一个Thread进行绑定。
+3.所有由EventLoop所处理的各种IO事件都将在它所关联的那个Thread上进行处理。
+4.一个Channel在它的整个生命周期中只会注册在一个EventLoop上。
+5.一个EventLoop在运行过程当中，会被分配给一个或者多个Channel。
