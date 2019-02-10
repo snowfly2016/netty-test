@@ -42,9 +42,22 @@ public class BytebufTest3 {
      * 2.当读索引与写索引处于同一个位置时，如果我们继续读取，那么就会抛出IndexOutOfBoundsException
      * 3.对于ByteBuf的任何读写操作都会分别单独维护读索引与写索引。maxCapacity最大容量默认的限制就是Integer.MAX_VALUE。
      *
+     * JDK的ByteBuffer的缺点：
+     * 1.final byte[] hb；这是JDK的ByteBuffer对象中用于存储数据的对象声明；可以看到，其字节数据是被声明为final的，也就是长度是固定不变的。一旦分配好后不能动态扩容与收缩；而且当待存储的数据字节很大时就很有可能出现IndexOutOfBoundException。如果要预防这个异常，那就需要在储存之前完全确定好待存储的字节大小。如果ByteBuffer的空间不足，我们只有一种解决方案，创建一个全新的ByteBuffer对象，然后在将之前的ByteBuffer中的数据复制过去，这一切操作都需要由开发者自己来手动完成。
+     * 2.ByteBuffer只使用一个position指针来标识位置信息，在进行读写切换时就需要调用flip方法或者是rewind方法，使用起来很不方便。
      *
+     * Netty的ByteBuf的优点：
+     * 1.存储自己的数组是动态的，其最大值默认是Integer.MAX_VALUE。这里的动态性是体现在write方法中的，write方法在执行时会判断buffer的容量，如果不足则自动扩容。
+     * 2.ByteBuf的读写索引是完全分离的，使用起来很方便。
      *
+     * ReferenceCounted 引用计数
+     * int refCnt()
+     * ReferenceCounted retain()
+     * boolean release()
      *
+     * AbstractReferenceCountedByteBuf
+     * retain0方法 自旋锁
+     * release0方法
      *
      * @param args
      */
