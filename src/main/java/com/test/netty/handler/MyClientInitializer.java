@@ -12,7 +12,8 @@ public class MyClientInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline channelPipeline = ch.pipeline();
 
-        channelPipeline.addLast(new MyByteToLongDecoder());
+        //channelPipeline.addLast(new MyByteToLongDecoder());
+        channelPipeline.addLast(new MyByteToLongDecoder1());
         channelPipeline.addLast(new MyByteToLongEncoder());
         channelPipeline.addLast(new MyClientHandler());
     }

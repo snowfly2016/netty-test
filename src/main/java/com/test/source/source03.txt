@@ -9,6 +9,10 @@ AtomicIntegerFieldUpdater要点总结：
 
 ****************************************************************************************************
 netty官网文档 引用计数器 reference-counted-objects
+http://netty.io/wiki/reference-counted-objects.html
+
+什么是Netty的内存泄漏检测？是如何实现的？
+http://calvin1978.blogcn.com/articles/netty-leak.html
 
 将从客户端消息转成ByteBuf，放入Handler链中，往后传递，该类就是 NioByteUnsafe read()
 
@@ -33,3 +37,7 @@ Netty自动区分入站、出站处理器，不会因为程序员定义的顺序
 关于Netty编解码器重要结论：
 1.无论是编码器还是解码器，其所接收的消息类型必须要与待处理的参数类型一致，否则该解码器或编码器不会执行
 2.在解码器进行数据解码时，一定要借的判断缓冲ByteBuf中的数据是否足够，否则将会产生一些问题。
+
+
+MessageToMessageCodec 既是解码器也是编码器
+LengthFieldBasedFrameDecoder

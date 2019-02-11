@@ -13,9 +13,10 @@ public class MyServerInitializer extends ChannelInitializer<SocketChannel> {
         ChannelPipeline channelPipeline = ch.pipeline();
 
         //自定义解码器
-        channelPipeline.addLast(new MyByteToLongDecoder());
+        //channelPipeline.addLast(new MyByteToLongDecoder());
+        channelPipeline.addLast(new MyByteToLongDecoder1());
         channelPipeline.addLast(new MyByteToLongEncoder());
-
+        channelPipeline.addLast(new MyLongToStringDecoder());
         channelPipeline.addLast(new MyServerHandler());
     }
 }

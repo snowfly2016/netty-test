@@ -22,10 +22,10 @@ public class MyClientHandler extends SimpleChannelInboundHandler<Long> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //去掉L后，调试发现服务端收不到信息为啥呢？MessageToByteEncoder<I>  acceptOutboundMessage
         ctx.writeAndFlush(123456L);
-        ctx.writeAndFlush(1L);
+        /*ctx.writeAndFlush(1L);
         ctx.writeAndFlush(2L);
         ctx.writeAndFlush(3L);
-        ctx.writeAndFlush(4L);
+        ctx.writeAndFlush(4L);*/
 
         //ctx.writeAndFlush("hello world");
         //ctx.writeAndFlush(Unpooled.copiedBuffer("hello world",Charset.forName("utf-8")));
