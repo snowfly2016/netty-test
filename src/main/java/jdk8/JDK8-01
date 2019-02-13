@@ -1,2 +1,59 @@
 #JDK8新特性介绍
 *Joda time
+
+#何为Lambda表达式
+* 一种运算符，用于指定匿名函数、闭包的运算符
+
+#为何需要Lambda表达式
+* 在Java中，我们无法将函数作为一个参数传递一个方法，也无法声明返回一个函数的方法；
+* 在JavaScript中，函数参数是一个函数，返回值是另一个函数的情况是非常常见的，JavaScript是一门非常典型的函数式语言；
+    a.execute(callback(event){
+        event....
+    });
+    
+#Java匿名内部类
+
+#Lambda
+* Lambda表达式基本结构：(para1,para2)->{    }
+* 函数式接口 @FunctionalInterface 一个接口中只有一个抽象的方法
+  a functional interface has exactly one abstract method.
+  functional interfaces can be created with lambda expressions, method references, or constructor references.
+1.如果一个接口只有一个抽象方法，那么该接口就是一个函数式接口。
+2.如果我们在某个接口上声明了FunctionalInterface注解，那么编译器就会按照函数式接口的定义来要求该接口。
+3.如果某一个接口只有一个抽象方法，但我们并没有给该接口声明FunctionalInterface注解，那么编译器依旧会将该接口看做是函数式接口。
+
+#接口中默认方法 default
+
+#Consumer 
+* 代表一个操作
+
+#Lambda表达式的作用
+* Lambda表达式为Java添加了缺失的函数式编程特性，使我们能将函数当做一等公民看待
+* 在将函数作为一等公民的语言中，Lambda表达式的类型是函数。但在Java中，Lambda表达式是对象，他们必须依附于一类特别的对象类型--函数式接口（functional interface）
+
+----
+#Java Lambda概要
+Java Lambda表达式是一种匿名函数，它是没有声明的方法，即没有访问修饰符、返回值声明和名字
+
+
+#Java Lambda 表达式作用
+* 传递行为，而不仅仅是值
+* 提升抽象层次
+* API重用性更好
+* 更加灵活
+
+#Lambda基本语法
+(type1 arg1,type2 arg2) ->{body}
+(arg1,arg2) ->{body}
+arg1 ->{body}
+s-> System.out.println()
+
+#Lambda结构
+* 一个Lambda表达式可以有零个或多个参数
+* 参数的类型既可以明确声明，也可以根据上下文来推断。比如（int a）与 (a)效果相同
+* 所有参数需包含在圆括号内，参数之间用逗号相隔。比如（a,b,c）或（int a,int b,int c）
+* 圆括号代表参数集为空。比如（）-> 42
+* 当只有一个参数，且其类型可推导时，圆括号()可省略，比如 a-> return a*a
+* Lamdba表达式的主体可包含0条或多条语句
+* 如果Lambda表达式的主体只有一条语句，花括号{}可以省略。匿名函数的返回类型与该主体表达式一致
+* 如果Lambda表达式的主体包含一条以上语句，则表达式必须包含在花括号中，形成代码块。匿名函数的返回类型与代码块的返回类型一致，若没有返回则为空
