@@ -1,0 +1,4 @@
+#Optional
+* 解决NPE问题  NullPointException
+* String str = null;
+* value-based
