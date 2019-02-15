@@ -2,3 +2,12 @@
 * 解决NPE问题  NullPointException
 * String str = null;
 * value-based
+
+#方法引用 method reference
+* 方法引用实际上是个Lambda表达式个一个语法糖;
+* 我们可以将方法引用看做是一个"函数指针"，function pointer;
+* 方法引用分为4类：
+1.类名::静态方法名(classname::staticmethod或classname.staticmethod 区别，两者没有任何关系，classname.staticmethod方法调用，classname::staticmethod方法指向)
+2.引用名(对象名)::实例方法名
+3.
+4.
