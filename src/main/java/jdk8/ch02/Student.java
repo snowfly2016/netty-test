@@ -36,4 +36,13 @@ public class Student {
 
         return student1.getName().compareToIgnoreCase(student2.getName());
     }
+
+
+    public int compareByScore(Student student){
+        return this.score - student.getScore();
+    }
+
+    public int compareByName(Student student){
+        return this.name.compareToIgnoreCase(student.getName());
+    }
 }
