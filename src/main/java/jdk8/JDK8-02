@@ -49,3 +49,7 @@ students.stream().filter(student -> student.getAge() > 20).filter()
 
 终止操作则不返回Stream类型，可能不返回值，也可能返回其他类型的单个值；
 
+##Stream操作类型
+* intermediate 一个流可以后面跟随零个或多个intermediate操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用，这类操作都是延迟的lazy，就是说，仅仅调用到这个类方法，并没有真正开始流的遍历
+* terminal 一个流只能有一个terminal操作，当这个操作执行后，流就被使用光了，无法再被操作。所以这必定是流的最后一个操作。terminal操作的执行，才会真正开始流的遍历，并且会生成一个结果
+
