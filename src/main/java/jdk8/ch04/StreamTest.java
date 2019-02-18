@@ -1,9 +1,6 @@
 package jdk8.ch04;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StreamTest {
@@ -51,6 +48,8 @@ public class StreamTest {
         Map<Boolean,Map<Boolean,List<Student>>> maps = students.stream().collect(Collectors.groupingBy(s -> s.getScore() > 80,Collectors.groupingBy(s->s.getScore() > 90)));
 
         System.out.println(maps);
+
+        students.stream().collect(Collectors.groupingBy(Student::getScore,Collectors.collectingAndThen(Collectors.minBy(Comparator.comparingInt(Student::getScore)),Optional::get)));
 
 
     }
