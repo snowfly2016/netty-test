@@ -1,0 +1,14 @@
+##collect方法
+* <R, A> R collect(Collector<? super T, A, R> collector);
+* collect 收集器
+* Collector作为collect方法的参数
+* Collector是一个接口。它是一个可变的汇聚操作，将输入元素累积到一个可变的结果容器中，它会在所有元素都处理完毕后，将累积的结果转换为一个最终的表示（这是一个可选操作）；它支持串行与并行两种方式。（并行和串行需要根据实际测试选择）
+* Collectors本身提供了关于Collector的常见汇聚实现，Collectors本身实际上是一个工厂
+* combiner函数，有4个线程同时去执行，那么就会生成4个部分结果，
+(1，2，3，4  1,2->5 5,3->6 6,4->7)
+* 为了确保串行与并行操作结果的等价性，Collector函数需要满足两个条件：同一性，结合性
+* a == combiner.apply(a, supplier.get()) supplier.get()新建一个空的容器，(List<String> list,List<String> list1)->{list1.addAll(list2);return list1;}
+* T 流中的每一个元素；A 中间结果集合； R 结果类型；
+* 函数式编程最大的特点：表示做什么，而不是如何做。
+* 
+* 
