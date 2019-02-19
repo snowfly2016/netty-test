@@ -11,6 +11,12 @@ import java.util.stream.Collector;
 
 public class MySetCollector2<T> implements Collector<T,Set<T>,Map<T,T>> {
 
+    /**
+     * 串行流 生成一个
+     * 并行流 生成多个
+     *
+     * @return
+     */
     @Override
     public Supplier<Set<T>> supplier() {
         System.out.println("supplier invoked");
@@ -21,7 +27,8 @@ public class MySetCollector2<T> implements Collector<T,Set<T>,Map<T,T>> {
     public BiConsumer<Set<T>, T> accumulator() {
         System.out.println("accumulator invoked");
         return (set,i)->{
-            System.out.println("accumulator "+Thread.currentThread().getName());
+            // 输出set集合会报错，需要注意
+            System.out.println("accumulator " +Thread.currentThread().getName());
             set.add(i);
         };
     }
@@ -35,6 +42,7 @@ public class MySetCollector2<T> implements Collector<T,Set<T>,Map<T,T>> {
         System.out.println("combiner invoked");
 
         return (set1,set2)->{
+            System.out.println("----------------------------------");
             set1.addAll(set2);
             return set1;
         };
@@ -57,7 +65,7 @@ public class MySetCollector2<T> implements Collector<T,Set<T>,Map<T,T>> {
 
     /**
      * Characteristics.IDENTITY_FINISH
-     *
+     * Characteristics.CONCURRENT 特性需要注意
      *
      *
      * @return
@@ -70,14 +78,16 @@ public class MySetCollector2<T> implements Collector<T,Set<T>,Map<T,T>> {
 
 
     public static void main(String[] args) {
-        List<String> list = Arrays.asList("hello","world","welcome","a","b","c");
-        Set<String> set = new HashSet<>();
-        set.addAll(list);
+        for(int i=0;i<10;i++){
+            List<String> list = Arrays.asList("hello","world","welcome","a","b","c");
+            Set<String> set = new HashSet<>();
+            set.addAll(list);
 
-        System.out.println(set);
+            System.out.println(set);
 
-        Map<String,String> map = set.parallelStream().collect(new MySetCollector2<>());
+            Map<String,String> map = set.parallelStream().collect(new MySetCollector2<>());
 
-        System.out.println(map);
+            System.out.println(map);
+        }
     }
 }
