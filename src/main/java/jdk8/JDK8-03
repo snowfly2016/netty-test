@@ -15,3 +15,16 @@
 
 ##comparator方法
 * thenComparing() 比较串联功能
+
+##对Collectors静态工厂类来说，其实现分为两种情况
+* 通过CollectorImpl来实现
+* 通过reducing方法来实现，reducing方法本身又是通过CollectorImpl来实现的。
+
+
+##groupingBy实现
+* 
+
+##stream
+* public interface Stream<T> extends BaseStream<T, Stream<T>>
+* public interface BaseStream<T, S extends BaseStream<T, S>> extends AutoCloseable
+* onClose()方法添加N个，第一个抛出异常了，不会影响后继的；异常压制

@@ -30,8 +30,8 @@ public class MySetCollector<T> implements Collector<T,Set<T>,Set<T>> {
     public Function<Set<T>, Set<T>> finisher() {
         System.out.println("finisher invoked");
         //return ts -> ts;
-        return Function.identity();
-        //throw new UnsupportedOperationException();
+        //return Function.identity();
+        throw new UnsupportedOperationException();
     }
 
     @Override
