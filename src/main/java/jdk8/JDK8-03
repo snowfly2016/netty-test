@@ -28,3 +28,8 @@
 * public interface Stream<T> extends BaseStream<T, Stream<T>>
 * public interface BaseStream<T, S extends BaseStream<T, S>> extends AutoCloseable
 * onClose()方法添加N个，第一个抛出异常了，不会影响后继的；异常压制
+
+##Spliterator<T>
+* 对源进行遍历和分区
+* serial thread-confinement
+* 
