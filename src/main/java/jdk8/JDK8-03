@@ -32,4 +32,6 @@
 ##Spliterator<T>
 * 对源进行遍历和分区
 * serial thread-confinement
-* 
+* ReferencePipeline.head 表示流的源阶段
+* ReferencePipeline 表示流的源阶段与中间阶段
+* 二者在大部分属性的设定上都是类似的，但存在一些属性是不同的，比如说Head
