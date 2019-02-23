@@ -1,0 +1,66 @@
+##MySQL study
+* 鸟瞰全局（整体层面）
+* 会使用相关的功能
+* 分析相关功能的原理
+* 阅读英文文档求解问题
+* 记录学习笔记
+
+##MySQL逻辑架构
+* MySQL分为Server层和存储引擎层；
+* Server层
+  * 连接器 负责跟客户端建立连接，获取权限、维持和管理连接
+    * 一个用户A建立连接后，如果使用管理员账号登录修改了A的权限，不会立即生效也就是当前会话还是原来的权限，只有A用户连接断开，重新建立连接此时会采用新的权限。
+    * 用户建立连接后，没有后续的操作，此时可以通过show processlist 命令查看，Command列显示为sleep表示一个空闲连接
+    * 空闲时间的阈值是通过wait_timeout控制的，默认是8小时，会自动断开
+    * 如何避免长连接问题？方案1：定时断开；方案2：5.7及以后的版本中，使用mysql_reset_connection来重新初始化连接资源；
+  * 查询缓存
+    * 8版本已经砍掉该功能
+    * 表上数据发生变动，缓存的数据需要清空，因此对于频繁变动的数据不适合做缓存
+  * 分析器
+    * 词法分析
+    * 语法分析
+  * 优化器
+    * 选择合适的索引、生成执行计划
+  * 执行器
+    * 操作引擎，返回结果
+    * 验证用户是否对此操作有权限？？
+* 存储引擎层 负责数据的存储和提取，其架构模式是插件式，支持innodb、memory等，
+* 一条SQL语句()的执行过程 客户端->(连接器->查询缓存->分析器->优化器->执行器)Server层->(存储引擎)存储引擎层
+
+##日志系统
+* redo log（InnoDB引擎特有的日志，其他引擎没有）
+  * WAL技术 Write-Ahead Logging 先写日志，在写磁盘
+  * write pos 当前记录的位置，一边写一遍后移
+  * checkpoint 当前要擦除的位置，也是往后推移且循环的
+  * write pos 和 checkpoint 之间的位置表示可以写入的部分；如果write pos 追上了checkpoint，那么需要将checkpoint后移；
+  * crash-safe 指的是即使数据库发生异常重启，之前提交的记录都不会丢失，就是有redo log来做保证的；
+* binlog(归档日志) server层对应的日志，所有的引擎都可以使用；
+
+
+* redo log && binlog 区别
+  * redo log是InnoDB引擎特有的；binglog是MySQL的server层实现的，所有引擎都可以使用；
+  * redo log 是物理日志，记录的是在某一个数据页上做了什么修改，binlog是逻辑日志，记录的是这个语句的原始逻辑，
+  * redo log 循环写，空间是固定会用完，binlog是可以追加写入。追加写入是指文件写到一定的大小，会切换到下一个文件，不会覆盖之前的写入；
+* update t set c=c+1 where id =2的执行流程；（执行器和引擎的部分）执行器先找引擎获取id =2 这一行数据，如果id是主键，引擎直接根据树搜索到这一行，如果id=2的数据在内存中，则直接返回给执行器，否则需要从磁盘读取数据到内存，然后返回；执行器拿到引擎给的这一行数据，把这个值做加1的操作，b比如原来的值为N，那么现在的值为N+1；得到新的一行数据，调用引擎接口写入这一行新数据；引擎将这个行数据更新到内存中，同时将这个更新操作记录到redo log中，此时的redo log处于 prepare状态，然后告知执行器执行完了，随时可以提交事务；执行器生成这个操作的binlog，并把binlog写入磁盘；执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成commit状态，更新完成；
+* 两阶段提交
+  * 写完redo log后服务奔溃了，没有写入binlog，会产生什么问题？ 少了一次更新
+  * 写完binlog后服务奔溃了，没有写入redo log，会产生什么问题？ 多了一次事务
+  * 保证redo log && binlog 状态的一致
+  
+* innodb_flush_log_at_commit=1 表示每次事务的redo log直接持久化到磁盘；可以保证MySQL异常重启之后数据不丢失
+* sync_binlog=1 表示每次事务的binlog直接持久化到磁盘；可以保证MySQL异常重启之后binlog不丢失
+
+* binlog类型
+  * row level 记录行内容，记录两条，更新前后都会有；
+  * statment level 记录SQL语句；
+  * mixed level
+  * 三种类型之间的区别？
+ 
+##MySQL事务
+* ACID(Atomicity、Consistency、Isolation、Durability 原子性、一致性、隔离性、持久性)
+* 脏读dirty read、不可重复读 non-repeatable read、幻读phantom read
+* 事务隔离级别
+  * 读未提交 read uncommitted 一个事务还没有提交，它做的变更就能被别的事务看到；
+  * 读提交 read committed 一个事务提交之后，它做的变更才会被别的事务看到；
+  * 可重复读 repeatable read 一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一致的。当然再次隔离级别下，未提交的变更对其他事务是不可见的。
+  *

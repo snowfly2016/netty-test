@@ -28,10 +28,21 @@
 * public interface Stream<T> extends BaseStream<T, Stream<T>>
 * public interface BaseStream<T, S extends BaseStream<T, S>> extends AutoCloseable
 * onClose()方法添加N个，第一个抛出异常了，不会影响后继的；异常压制
+* Collection接口中定义了默认串行流和并行流方法；
+default Stream<E> stream() 
+default Stream<E> parallelStream()
+当分割器不能返回一个可变的、并发的、延迟绑定的分割器时以上两个方法必须被复写；
+
 
 ##Spliterator<T>
 * 对源进行遍历和分区
 * serial thread-confinement
 * ReferencePipeline.head 表示流的源阶段
 * ReferencePipeline 表示流的源阶段与中间阶段
-* 二者在大部分属性的设定上都是类似的，但存在一些属性是不同的，比如说Head
+* 二者在大部分属性的设定上都是类似的，但存在一些属性是不同的，比如说Head是没有previousStage的，而ReferencePipeline存在previousStage等等；
+* AbstractPipeline 元素逐个执行相关的操作，然后继续下一个元素；流存在断路
+* sourceSpliterator sourceSupplier 互斥；
+* forEachRemaining 方法
+* Iterator实现流的迭代
+* Sink.java
+* 
