@@ -57,10 +57,23 @@
   * 三种类型之间的区别？
  
 ##MySQL事务
-* ACID(Atomicity、Consistency、Isolation、Durability 原子性、一致性、隔离性、持久性)
-* 脏读dirty read、不可重复读 non-repeatable read、幻读phantom read
+* 事务的特性：ACID(Atomicity、Consistency、Isolation、Durability 原子性、一致性、隔离性、持久性)
+* 多事务同时执行时可能会出现问题：脏读dirty read、不可重复读 non-repeatable read、幻读phantom read
 * 事务隔离级别
   * 读未提交 read uncommitted 一个事务还没有提交，它做的变更就能被别的事务看到；
   * 读提交 read committed 一个事务提交之后，它做的变更才会被别的事务看到；
   * 可重复读 repeatable read 一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一致的。当然再次隔离级别下，未提交的变更对其他事务是不可见的。
-  *
+  * 串行化 serializable 顾名思义对于同一行记录，写会加写锁，读会加读锁，当出现读写锁冲突时，后访问的事务必须等待前一个事物执行完毕，才能继续执行。
+  * 在实现上，数据库里面会创建一个视图，访问的时候以视图的逻辑结为准。在“可重复读”隔离级别下，这个视图是在事务启动时创建的，整个事务存在期间都用这个视图，在"读提交"隔离级别下，这个视图是在每个SQL语句开始执行的时候创建的，需要注意"读未提交"隔离级别下直接返回记录的最新值，没有视图的概念；而"串行化"隔离级别下直接用加锁的方式避免并行访问；每一种隔离级别都有自己的使用场景
+* oracle数据的默认的隔离级别是rc，而MySQL的隔离级别是RR,因此将Oracle迁移到MySQL时，需要调低隔离级别；
+* 配置事务隔离级别参数：transaction-isolation
+* MVCC 多版本并发控制
+* 回滚日志什么时候删除呢？系统会判断当没有事务在需要这些回滚日志时，回滚日志会被删除；
+* 回滚日志什么手不需要了呢？当系统里面没有比这个回滚日志更早的read-view的时候；
+* 为什么不建议使用长事务呢？长事务意味着系统里面会存在很老的事务视图，由于这些事务随时可以访问数据库里面的任何记录，所以在提交这个事务之前，数据库里面它可能用到的回滚记录都必须保留，这就会导致大量占用存储空间。
+* 事务启动方式：显示启动事务语句 begin 或者 start transaction 配套的提交语句是commit，回滚语句是rollback；set autocommit = 0,该命令会将线程的自动提交关闭掉，只要执行一个select语句，事务就开启了，而且不会自动提交，该事务持续存在直到主动执行commit或者rollback语句，或者断开连接；该情况下可能会产生长事务。建议通过显示方式（autocommit = 1）；
+* 对于一个频繁使用事务的业务，显式事务在每个事务在开始前需要一次begin，如要考虑多次交互的问题（每个事务在开始时都不需要主动执行一次 “begin”，减少了语句的交互次数），可以采用 commit work and chain语句；在 autocommit = 1的情况下，用begin显式启动事务，如果执行commit则提交事务，如果执行commit work and chain，则提交事务并自动启动下一个事务，这可以省略执行begin的开销；
+* 查询表中的长事务；information_schema 库 innodb_trx 表
+    select * from information_schema.innodb_trx where TIME_TO_SEC(timediff(now(),trx_started))>60
+*
+

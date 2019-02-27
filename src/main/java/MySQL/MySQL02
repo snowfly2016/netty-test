@@ -1,0 +1,64 @@
+##MySQL索引
+* 索引的出现就是为了提高数据的查询效率，就像书的目录一样；
+* 索引的常见模型
+  * 哈希表
+  * 有序数组
+  * 搜索树（二叉树...N叉树）
+  * 其他（跳表、LSM树）
+    
+* InnoDB的索引模型
+  * 索引组织表：在InnoDB中，表都是根据主键顺序以索引的形式存放的，这种存储方式的表称为索引组织表；
+  * InnoDB使用了B+树索引模型
+  * 索引类型分为：主键索引、非主键索引
+  * 主键索引（聚集索引 clustered index）主键索引的叶子节点存储的是整行数据；
+  * 非主键索引（二级索引 secondary index）非主键索引叶子节点的内容是主键的值（回表：回到主键索引树搜索的过程）；
+  * 基于主键索引和普通索引查询有什么区别？基于非主键索引的查询需要多扫描一颗索引树，因此，应尽量使用主键查询
+  * 一个表上包含多个索引树；
+  * 索引的维护：（B+树为了维护索引的有序性，当产生数据的新增和删除就会出现页分裂、页合并）；一个数据页满了，按照B+Tree算法，新增加一个数据页，叫做页分裂，会导致性能下降。空间利用率降低大概50%。当相邻的两个数据页利用率很低的时候会做数据页合并，合并的过程是分裂过程的逆过程
+  * 自增主键是自增列上定义的主键，not null primary key atuo_increment，插入新记录时可以不指定ID的值，系统会获取当前ID最大值加一作为下一条记录的ID值；
+  * 主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小；
+  * 关于那些场景下使用自增主键需要按照业务的实际场景来区分，未必每个表都设置自增主键；
+  * 从性能和存储空间方面考量，自增主键往往是更合理的选择。
+  * T his group of numbers is from a presentation Jeff Dean gave at a Engineering All-Hands Meeting at Google. 
+       L1 cache reference 0.5 ns
+       Branch mispredict 5 ns
+       L2 cache reference 7 ns
+       Mutex lock/unlock 100 ns
+       Main memory reference 100 ns
+       Compress 1K bytes with Zippy 10,000 ns
+       Send 2K bytes over 1 Gbps network 20,000 ns
+       Read 1 MB sequentially from memory 250,000 ns
+       Round trip within same datacenter 500,000 ns
+       Disk seek 10,000,000 ns
+       Read 1 MB sequentially from network 10,000,000 ns
+       Read 1 MB sequentially from disk 30,000,000 ns
+       Send packet CA->Netherlands->CA 150,000,000 ns
+  * 覆盖索引：由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以覆盖索引是一个常用的性能优化手段；
+  * 索引之最左前缀原则 在建立联合索引时，如何安排索引内字段的顺序（1.如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的；2.空间）
+  * 索引下推 减少回表次数
+  
+  * 1.重建普通索引 alter table T drop index k; alter table T add index(k);
+  * 2.重建主键索引 alter table T drop primary key; alter table T add primary key(id);
+  * 以上两个重建语句是否合理？重建索引k的做法是合理的，可以达到省空间的目标；但是重建主键索引的过程不合理，无论删除主键还是创建主键都会将整个表重建，如果这两个语句连着执行，第一个语句就白做了；这两个语句可以用 alter table T engine = InnoDB替代；
+  * MySQL 重建索引是不是需要自动执行呢？
+  * Multi-Range Read (MRR)多范围读, 它的作用针对基于辅助/第二索引的查询，减少随机IO，并且将随机IO转化为顺序IO，提高查询效率。
+  * 
+##如何避免长事务对业务的影响
+* 应用开发端
+  * 确认是否使用了set autocommit=0;打开MySQL的general_log
+  * 确认是否有不必要的只读事务
+  * 业务连接数据库时，根据业务本身的预估，通过 set max_connection_time命令来控制每个语句的执行的最长时间，避免单个语句意外执行太长时间
+* 数据库端
+  * 监控information_schema.innodb_trx表，设置长事务阈值，超过就报警或者kill调；
+  * Procon pt-kill
+  * 业务测试阶段输出所有的general_log，分析日志行为提前发现问题
+  * 如果使用的是MySQL5.6及以后的版本，把innodb_undo_tablespace设置成2或者更大的值，如果真出现大事务导致回滚段过大，这样设置清理起来方便；
+*
+
+##MySQL锁
+* 根据加锁的范围，锁大致可分为全局锁、表级锁、行级锁
+* 全局锁：对整个数据库实例加锁；MySQL提供了一个加全局读锁的方法，命令是：flush table with read lock(FTWRL)；全局锁的典型使用场景是，做全库逻辑备份；
+*
+*
+
+

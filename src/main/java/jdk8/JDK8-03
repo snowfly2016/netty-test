@@ -45,4 +45,17 @@ default Stream<E> parallelStream()
 * forEachRemaining 方法
 * Iterator实现流的迭代
 * Sink.java
+* opWrapSink
+* ForEachOps.makeRef
+* copyInto  
+* 方法串联，然后将数据绑定
+* BaseStream 
+    -> AbstractPipeline 
+        -> ReferencePipeline 
+            -> Head / StatelessOp / StatefulOp
+* TerminalOp 
+    -> Finde 
+    ->Foreach 
+    -> Match 
+    -> Reduce
 * 
