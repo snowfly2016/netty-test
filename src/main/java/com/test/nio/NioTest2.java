@@ -25,6 +25,7 @@ public class NioTest2 {
             byte b = byteBuffer.get();
             System.out.println("character:"+(char)b);
         }
-        fileInputStream.available();
+        //fileInputStream.available();
+        fileInputStream.close();
     }
 }
