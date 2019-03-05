@@ -126,4 +126,7 @@ public class Sample{
 **********************************************************************************
 * 在父亲委托机制中，各个加载器按照父子关系形成了树形结构，除了根类加载器之外，其余的类加载器有且只有一个父类加载器；
 * 定义类加载器和初始类加载器
-* 
+* 获取当前类的ClassLoader clazz.getClassLoader();
+* 获取当前线程上下文的ClassLoader Thread.currentThread().getContextClassLoader()
+* 获取系统的ClassLoader ClassLoader.getSystemClassLoader()
+* 获取调用者的ClassLoader DriverManager.getCallerClassLoader()
