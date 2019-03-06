@@ -8,7 +8,7 @@ public class NioTest5 {
      * buffer
      * 类型匹配
      * 放置什么类型，取出来时也是什么类型 否则报错
-     * 类型化的put与get方法
+     * ByteBuffer类型化的put与get方法
      *
      *
      * @param args

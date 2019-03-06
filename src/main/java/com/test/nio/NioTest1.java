@@ -30,6 +30,13 @@ public class NioTest1 {
      *********************************************************************
      * 关于Nio buffer中的三个重要状态属性的含义：position、limit、capacity；
      * 0<=mark<=position<=limit<=capacity
+     *
+     * flip 方法会设置position、limit的位置
+     * rewind
+     * clrear
+     *
+     * long address **Used only by direct buffers**
+     *
      * buffer 线程不安全
      * 堆内存的分配、堆外内存的分配（操作系统控制）
      *
