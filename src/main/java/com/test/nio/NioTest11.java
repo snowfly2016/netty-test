@@ -14,8 +14,8 @@ public class NioTest11 {
      * 关于buffer的 scattering 与 gathering
      * 分散 聚集
      * read、write
-     * scattering 传递一个buffer数组 把来自一个channel读到一个buffer，顺序来读
-     * gathering 传递一个buffer数组 依次把buffer中的数据写入到一个channel中，顺序写
+     * scattering 传递一个buffer数组 把来自一个channel读到一个buffer，顺序来读；先把第一个buffer读满，在读第二个...；
+     * gathering 传递一个buffer数组 依次把buffer中的数据写入到一个channel中，顺序写；先写第一个，在写第二个...；
      * 用途：
      *
      * 客户端和服务器端示例 网络程序

@@ -23,6 +23,7 @@ public class NioTest10 {
 
         System.out.println("lock type:"+fileLock.isShared());
 
+        //释放锁
         fileLock.release();
 
         randomAccessFile.close();
