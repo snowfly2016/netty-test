@@ -1,5 +1,7 @@
 package com.test.jvm;
 
+import sun.misc.Launcher;
+
 /**
  * 在运行期，一个Java类是由该类的完全限定名（binary name 二进制名）和用于加载该类的定义类加载器（defining loader）所共同决定的；
  * 如果同样名字（即相同的完全限定名）的类是由两个不同的加载器所加载，那么这些类就是不同的，即便.class文件的字节码完全一样，
@@ -12,8 +14,6 @@ package com.test.jvm;
  *
  * *************************************************************
  * 类加载器本身也是类，类加载器是谁来加载的呢？
- * 启动类加载器加载扩展类加载器和系统类加载器等； 启动类加载是内建与jvm之内的，他不是Java，是c++
- *
  *
  * 数组是jvm运行时创建的；
  *
@@ -42,10 +42,58 @@ public class JvmTest23 {
     public static void main(String[] args) {
         System.out.println(System.getProperty("sun.boot.class.path"));
         System.out.println(System.getProperty("java.ext.dirs"));
+        System.out.println("-----------------------------");
         System.out.println(System.getProperty("java.class.path"));
 
 
         // 输入 null
         System.out.println(ClassLoader.class.getClassLoader());
+        System.out.println("-----------------------------");
+        //扩展类加载器与系统类加载器也是由启动类加载器所加载的
+        System.out.println(Launcher.class.getClassLoader());
+        ClassLoader.getSystemClassLoader();
+        System.out.println("---------------new--------------");
+        /**
+         * 默认情况下，未定义指向appclassloader
+         *
+         * 显式指定系统类加载器
+         * 将JvmTest16作为系统类加载器
+         *
+         * JvmTest16 中必须定义一个只有ClassLoader参数的构造方法
+         *
+         * java -Djava.system.class.loader=com.test.jvm.JvmTest16 com.test.jvm.JvmTest23
+         *
+         */
+        System.out.println(System.getProperty("java.system.class.loader"));
+
+        System.out.println(JvmTest23.class.getClassLoader());
+
+        System.out.println(JvmTest16.class.getClassLoader());
+
+        System.out.println(ClassLoader.getSystemClassLoader());
     }
+
+    /**
+     * ClassLoader.getSystemClassLoader()方法的doc注解文档
+     *
+     *
+     * context class loader 上下文类加载器
+     * sets it as the context class loader of the invoking Thread。
+     *
+     * sun.misc.Launcher l = sun.misc.Launcher.getLauncher();
+     *
+     * openjdk
+     * http://openjdk.java.net/
+     *
+     * http://grepcode.com
+     * SystemClassLoaderAction 中run方法会自动调用
+     * Constructor<?> ctor = Class.forName(cls, true, parent)
+     *             .getDeclaredConstructor(new Class<?>[] { ClassLoader.class });
+     *
+     * Thread.currentThread().setContextClassLoader(sys);
+     *
+     *
+     * Class.forName
+     *
+     */
 }

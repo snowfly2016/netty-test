@@ -46,6 +46,11 @@ public class JvmTest16 extends ClassLoader {
         this.classLoaderName = classLoaderName;
     }
 
+    public JvmTest16(ClassLoader parent){
+        //显式指定该类的父类加载器
+        super(parent);
+    }
+
     @Override
     public String toString() {
         return "JvmTest16{" +

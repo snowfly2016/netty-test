@@ -39,6 +39,8 @@ import java.util.Set;
  *
  * socket.connect();
  *
+ *
+ *
  * **********************************************************************
  * NIO能解决传统网络编程存在的问题，
  * Node采用的异步的方式
@@ -57,6 +59,7 @@ public class NioTest12 {
      * @param args
      */
     public static void main(String[] args) throws Exception{
+        //五个端口号
         int[] ports = new int[5];
 
         ports[0] =50000;
@@ -65,22 +68,38 @@ public class NioTest12 {
         ports[3] =50003;
         ports[4] =50004;
 
-        //selector 构造 需要读源码
+        /**
+         * selector 构造 需要<读源码>读源码</读源码>
+         * selector 创建方式两种
+         * 需要显式调用close()方法去关闭
+         *
+         * SelectionKey
+         *
+         * channel register(selector...)操作 一个事件key被加入
+         *
+         */
         Selector selector = Selector.open();
 
-        //Selector.open() 的创建者
-        System.out.println(SelectorProvider.provider().openSelector().getClass());
+        /**
+         * Selector.open() 的创建者
+         * class sun.nio.ch.KQueueSelectorProvider
+         * class sun.nio.ch.KQueueSelectorProvider
+         */
+        System.out.println(SelectorProvider.provider().getClass());
         System.out.println(sun.nio.ch.DefaultSelectorProvider.create().getClass());
 
+        //注册
         for(int i=0;i<ports.length;i++){
+            //read ServerSocketChannel 源码
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-
+            //配置是否阻塞
             serverSocketChannel.configureBlocking(false);
 
+            //
             ServerSocket serverSocket =serverSocketChannel.socket();
-
+            //绑定
             InetSocketAddress inetSocketAddress = new InetSocketAddress(ports[i]);
-
+            //
             serverSocket.bind(inetSocketAddress);
 
             //
