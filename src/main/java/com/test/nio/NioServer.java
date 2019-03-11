@@ -29,12 +29,13 @@ public class NioServer {
      */
     public static void main(String[] args) throws Exception{
 
+        //SelectorProvider.provider().openServerSocketChannel()
         ServerSocketChannel serverSocketChannel =  ServerSocketChannel.open();
         serverSocketChannel.configureBlocking(false);
         ServerSocket serverSocket = serverSocketChannel.socket();
         serverSocket.bind(new InetSocketAddress(8899));
 
-        //
+        //SelectorProvider.provider().openSelector()
         Selector selector = Selector.open();
         //注册
         serverSocketChannel.register(selector,SelectionKey.OP_ACCEPT);

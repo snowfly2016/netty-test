@@ -19,6 +19,8 @@ public class NioTest13 {
      * 查看文件编码的方式
      * enca工具
      *
+     * 存储一定是字节方式的，而不是字符，字符只是便于程序的处理而已
+     *
      * 1.iso-8859-1中文正常可以输出？平时有可能为啥会乱码？
      * 源文件utf-8
      * 2.utf-8 utf-16 utf-32 utf-16LE utf-16BE uinicode iso-8859-1 ASCII
@@ -33,28 +35,28 @@ public class NioTest13 {
      *  8 bit 表示一个字符，即用一个字节byte（8bit）来表示一个字符，共计可以表示256字符；所有位充分利用，向下完全兼容ascii
      *
      * 3.gb2312(中国)
-     *  两个字节表示一个汉字，未考虑生僻汉字
+     *  两个字节表示一个汉字，未考虑生僻汉字。16bit
      *
      * 4.gbk(中国)
      *  包含生僻汉字 gb2312的超集
      *
-     * 5.gb18030(中国)
+     * 5.gb18030(中国) 全集
      *
      * 6.big5（台湾）
      *
      * ................
      *
-     * 7.unicode    采用了两个字节来表示一个字符 (存储英文国家的文件会造成空间膨胀)
+     * 7.unicode    采用了两个字节来表示一个字符 (存储英文国家的文件会造成空间膨胀)  最广泛最全的
      *
-     * 8.utf（unicode translation format）
-     *   unicode是一种编码方式，而utf则是一种存储方式，utf-8是unicode的实现方式之一。
-     *   utf-16le（little endian）小端
-     *   utf-16be(big endian) 大端
-     *   zero width no-break space, 0xFEFF(BE)   0xFFFF(LE)
+     * 8.UTF（unicode translation format）
+     *   unicode是一种编码方式，而UTF则是一种存储方式，UTF-8是unicode的实现方式之一。
+     *   UTF-16le（little endian）小端
+     *   UTF-16be(big endian) 大端
+     *   Zero Width No-Break Space, 0xFEFF(BE)   0xFFFF(LE) 与计算的存储架构相关;
      *
-     *   utf-8 变成字节表示形式；一般来说，utf-8会通过三个字节来表示一个中文。
+     *   UTF-8 变成字节表示形式；一般来说，UTF-8会通过三个字节来表示一个中文。
      *
-     *   BOM（Byte Order Mark),   window存储有可能会带BOM需要注意
+     *   BOM（Byte Order Mark) 字节顺序标记,   window存储有可能会带BOM需要注意;
      *
      *
      *
@@ -96,6 +98,8 @@ public class NioTest13 {
         System.out.println(charBuffer.get(11));
         //编码 把字符转化为字节
         ByteBuffer byteBuffer = charsetEncoder.encode(charBuffer);
+
+        //ByteBuffer byteBuffers = Charset.forName("UTF-8").encode(charBuffer);
 
         fileChannel1.write(byteBuffer);
 

@@ -15,7 +15,7 @@ import java.util.ServiceLoader;
  * }
  * myMethod()里面则调用了Thread.currentThread().getContextClassLoader()获取当前线程的上下文类加载器做某些事情
  *
- * 如果一个类有类加载器A加载，那么这个类的依赖类也是有相同的类加载器加载的（如果该依赖类之前没有被加载过的话）
+ * 如果一个类由类加载器A加载，那么这个类的依赖类也是由相同的类加载器加载的（如果该依赖类之前没有被加载过的话）
  *
  * ContextClassLoader的作用就是为了破坏Java的类加载委托机制
  *
