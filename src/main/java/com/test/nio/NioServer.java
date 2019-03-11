@@ -21,6 +21,10 @@ public class NioServer {
      *
      * 一个线程解决了多客户端问题
      *
+     * 服务器端保存连接信息
+     *
+     * 启动N个客户端；NC客户端可以进行测试
+     *
      * @param args
      */
     public static void main(String[] args) throws Exception{
@@ -45,6 +49,7 @@ public class NioServer {
                     final SocketChannel socketChannel;
                     try{
                         if(selectionKey.isAcceptable()){
+                            //为啥是ServerSocketChannel？向下类型转换成功？
                             ServerSocketChannel server = (ServerSocketChannel)selectionKey.channel();
                             socketChannel = server.accept();
                             socketChannel.configureBlocking(false);
@@ -69,14 +74,14 @@ public class NioServer {
                                 System.out.println("receiverMessage:"+receiverMessage);
 
                                 String senderKey = null;
-
+                                // 获取发送者的key
                                 for(Map.Entry<String,SocketChannel> entry:map.entrySet()){
                                     if(socketChannel == entry.getValue()){
                                         senderKey = entry.getKey();
                                         break;
                                     }
                                 }
-
+                                // 将消息发送给其他客户端
                                 for(Map.Entry<String,SocketChannel> entry:map.entrySet()){
 
                                     SocketChannel value = entry.getValue();

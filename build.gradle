@@ -21,6 +21,7 @@ dependencies {
     compile 'io.grpc:grpc-netty-shaded:1.18.0'
     compile 'io.grpc:grpc-protobuf:1.18.0'
     compile 'io.grpc:grpc-stub:1.18.0'
+    compile 'mysql:mysql-connector-java:5.1.34'
 }
 
 

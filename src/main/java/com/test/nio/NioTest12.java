@@ -45,7 +45,10 @@ import java.util.Set;
  * NIO能解决传统网络编程存在的问题，
  * Node采用的异步的方式
  *
- *
+ * nc localhost 50000
+ * nc localhost 50001
+ * nc localhost 50002
+ * nc localhost 50003
  *
  *
  *
@@ -102,7 +105,7 @@ public class NioTest12 {
             //
             serverSocket.bind(inetSocketAddress);
 
-            //
+            //selector注册到channel SelectionKey源码doc阅读
             serverSocketChannel.register(selector,SelectionKey.OP_ACCEPT);
             System.out.println("监听端口："+ports[i]);
 
@@ -127,7 +130,7 @@ public class NioTest12 {
                     SocketChannel socketChannel = serverSocketChannel.accept();
 
                     socketChannel.configureBlocking(false);
-
+                    //selector注册到channel SelectionKey源码doc阅读
                     socketChannel.register(selector,SelectionKey.OP_READ);
                     //移除
                     iterator.remove();

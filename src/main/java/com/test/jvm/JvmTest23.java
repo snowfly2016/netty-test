@@ -92,8 +92,9 @@ public class JvmTest23 {
      *
      * Thread.currentThread().setContextClassLoader(sys);
      *
+     * Launcher源码阅读
      *
-     * Class.forName
+     * Class.forName(...)
      *
      */
 }
