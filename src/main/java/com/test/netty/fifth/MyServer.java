@@ -16,6 +16,8 @@ public class MyServer {
      * 刷新页面是注意 日志输出 连接断开 新建连接
      * http升级为websocket
      * 长连接建立后，一端开启飞行模式，则服务器端连接已经断开，服务无法感知是否断开，因此引入心跳
+     *
+     * test.html
      * @param args
      * @throws Exception
      */

@@ -18,4 +18,37 @@ public class Test {
  *
  *
  */
+
+/*
+    零拷贝：
+    将磁盘上文件读取到内存，发送给用户；Linux、Unix操作系统
+
+    User Space                 Kernel Space            Hardware
+       |       1.read() syscall    |                      |
+       |-------------------------->|       ask for data   |
+       |                           |--------------------->|
+       |                           |data to kernel buffer |
+       |                           |<---------------------|
+       |                           |    through DMA       |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+       |                           |                      |
+
+
+    用户空间切换到内核空间存在上下文切换；
+
+
+
+ */
+
+
 }

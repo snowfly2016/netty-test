@@ -130,3 +130,5 @@ public class Sample{
 * 获取当前线程上下文的ClassLoader Thread.currentThread().getContextClassLoader()
 * 获取系统的ClassLoader ClassLoader.getSystemClassLoader()
 * 获取调用者的ClassLoader DriverManager.getCallerClassLoader()
+
+* jar hell问题
