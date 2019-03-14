@@ -13,14 +13,14 @@ package com.test.jvm;
 public class JvmTest {
 
     public static void main(String[] args) {
-        //System.out.println(MyChild1.str);
+        System.out.println(MyChild1.str);
 
-        //System.out.println("-------------------------------");
-        //System.out.println(MyChild1.str2);
+        System.out.println("-------------------------------");
+        System.out.println(MyChild1.str2);
     }
 }
 
-/*
+
 class MyParent1{
     public  static  String str ="hello world";
     static {
@@ -33,4 +33,4 @@ class MyChild1 extends MyParent1{
     static {
         System.out.println("MyChild1 static block");
     }
-}*/
+}

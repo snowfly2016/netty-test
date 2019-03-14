@@ -20,7 +20,7 @@ public class NewIOServer {
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
 
         ServerSocket serverSocket = serverSocketChannel.socket();
-        //启用或者禁用属性 让地址或者端口在超时状态下可重用
+        //启用或者禁用属性 让地址或者端口在超时状态下可重用；连接被关闭，一段其他连接不能使用该端口，因为之前的连接还处于超时的状态，如下的参数就可以让只要关闭的，其他连接立马能使用
         serverSocket.setReuseAddress(true);
 
         serverSocket.bind(address);
@@ -40,7 +40,7 @@ public class NewIOServer {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                //归位
+                //归位；如果不执行如下操作，会导致无法读取
                 byteBuffer.rewind();
 
             }

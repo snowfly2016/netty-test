@@ -14,7 +14,7 @@ public class OldServer {
     public static void main(String[] args) throws Exception{
 
         ServerSocket serverSocket =new ServerSocket(8899);
-
+        //死循环等等连接
         while (true){
             //阻塞
             Socket socket =serverSocket.accept();
@@ -26,6 +26,7 @@ public class OldServer {
                 while (true){
                     //读取
                     int readcount = dataInputStream.read(bytes,0,bytes.length);
+                    //根据doc返回-1表示读完了
                     if(-1 == readcount){
                         break;
                     }
