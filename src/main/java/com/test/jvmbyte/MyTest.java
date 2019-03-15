@@ -133,7 +133,11 @@ package com.test.jvmbyte;
  *
  * 5.常量池的总体结构：Java类所对应的常量池主要由常量池数量与常量池数组（常量表）这两部分组成。常量池数量紧跟在主版本号后面，占据2个字节；常量池数组则紧跟在常量池数量之后。常量池数组与一般的数组不同的是，常量池数组中不同的元素的类型、结构都是不同的，长度当然也就是不同；但是，每一种元素的第一个数据都是一个u1类型，该字节是个标志位，占据1个字节。JVM在解析常量池时，会根据这个u1类型来获取元素的具体类型。值得注意的是，常量池数组中元素的个数=常量池-1（其中0暂时不使用），目的是满足某些常量池索引值的数据在特定情况下需要表达【不引用任何一个常量池】的含义；根本原因在于，索引为0也是一个常量（保留常量），只不过它不位于常量表中，这个常量就对应null值；所以，常量池的索引从1而非0开始。
  *
- * 6.
+ * 6.在JVM规范中，每个变量/字段都有描述信息，描述信息主要的作用是描述字段的数据类型、方法的参数列表（包括数量、类型、顺序）与返回值。根据描述符规则，基本数据类型和代表无返回值的void类型都用一个大写字符来表示，对象类型则使用字符L加对象的全限定名称来表示。为了压缩字节码文件的体积，对于基本数据类型，JVM都只使用一个大写字母来表示，如下所示：B -byte,C -char,D -double,F -float,I -int,J -long,S -short,Z -boolean,V -void,L -对象类型，如Ljava/lang/String
+ *
+ * 7.对于数组类型来说，每一个维度使用一个前置的[来表示，如int[]被记录为[I,String[][]被记录为[[Ljava/lang/String;
+ *
+ * 8.用描述符描述方法时，按照先参数列表，后返回值得顺序来描述，参数列表按照参数的严格顺序放在一组()之内，如方法：String getRealnamebyIdAndNickname(int id,String name)的描述符为：(I,Ljava/lang/String;)Ljava/lang/String
  *
  *
  *
@@ -141,7 +145,15 @@ package com.test.jvmbyte;
  *
  *
  *
- *
+ * 4个字节   Magic Number 魔数，值为0xCAFEBABE，Java创始人James Gosling制定
+ * 2+2个字节 Version 包括minor_version和major_version,minor_version:1.1(45),1.2(46),1.3(47),1.4(48),1.5(49),1.6(50),1.7(51)。指令集多年不变，但是版本号每次发布都变化。
+ * 2+n个字节 Constant Pool 包括字符串常量，数值常量等
+ * 2个字节   Access Flags
+ * 2个字节   This Class Name
+ * 2个字节   Super Class Name
+ * 2+n个字节 Interfaces
+ * 2+n个字节 Methods
+ * 2+n个字节 Attributes
  *
  */
 public class MyTest {

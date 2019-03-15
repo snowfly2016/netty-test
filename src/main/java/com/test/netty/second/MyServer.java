@@ -61,4 +61,31 @@ public class MyServer {
             workerGroup.shutdownGracefully();
         }
     }
+    /**
+     1.为何创建两个group；接受请求bossgroup，处理请求workergroup
+     EventLoopGroup 事件循环组 一个死循环；
+     EventLoopGroup 在事件循环的过程中（事件发生、连接建立），在selector选择时，允许注册channel（客户端连接等）；
+     EventLoop 事件循环
+
+     ChannelFuture
+     ChannelPromise 包含了channel的引用
+
+     线程数默认值为1；
+     线程的创建与任务解耦
+
+     命令模式、代理模式 ThreadPerTaskExecutor
+     Executor源码 doc
+
+
+
+
+
+
+
+
+
+
+
+
+     */
 }
