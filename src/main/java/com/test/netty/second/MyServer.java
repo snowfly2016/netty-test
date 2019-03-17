@@ -49,7 +49,7 @@ public class MyServer {
              */
             serverBootstrap.group(bossGroup,workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.WARN))
+                    .handler(new LoggingHandler(LogLevel.ERROR))
                     .childHandler(new MyServerInitializer());
             //服务器的启动 逻辑梳理 关键
             ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();
@@ -65,6 +65,8 @@ public class MyServer {
      1.为何创建两个group；接受请求bossgroup，处理请求workergroup
      EventLoopGroup 事件循环组 一个死循环；
      EventLoopGroup 在事件循环的过程中（事件发生、连接建立），在selector选择时，允许注册channel（客户端连接等）；
+
+     EventLoopGroup 继承 EventExecutorGroup；两个register方法的区别？或者说使用的用途
      EventLoop 事件循环
 
      ChannelFuture
@@ -76,13 +78,18 @@ public class MyServer {
      命令模式、代理模式 ThreadPerTaskExecutor
      Executor源码 doc
 
+     return this 返回当前实例
+
+     return (B)this;
+
+     接受xxx.class 反射
 
 
 
+     java.util.concurrent.Future
 
-
-
-
+     netty future 观察者模式的使用解决了jdk的future不能完成通知的问题
+     Netty扩展了Java的Future，最主要的改进就是增加了监听器Listener接口，通过监听器可以让异步执行更加有效率，不需要通过get来等待异步执行结束，而是通过监听器回调来精确地控制异步执行结束的时间点。Promise是可写的Future，Future自身并没有写操作相关的接口，Netty通过Promise对Future进行扩展，用于设置I/O操作的结果。源码DefaultPromise
 
 
 
