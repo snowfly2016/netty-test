@@ -155,6 +155,30 @@ package com.test.jvmbyte;
  * 2+n个字节 Methods
  * 2+n个字节 Attributes
  *
+ * Class字节码中有两种数据类型
+ * 字节数据直接量：这是基本的数据类型。共细分为u1,u2,u4,u8四种，分别代表连续的1一个字节、2个字节、4个字节、8个字节组成的整体数据。
+ * 表（数组）：表是由多个基本数据类型或其他表，按照既定顺序组成的大的数据集合。表是由结构的，它的结构体现在：组成表的成分所在的位置和顺序都是已经严格定义好的。
+ *
+ *
+ * ClassFile{
+ *     u4 magic;
+ *     u2 minor_version;
+ *     u2 major_version;
+ *     u2 constant_pool_name;
+ *     u2 access_flags;
+ *     u2 this_class;
+ *     u2 super_class;
+ *     u2 interface_count;
+ *     u2 interfaces[interface_count];
+ *     u2 fields_count;
+ *     field_info fields[fields_count];
+ *     u2 methods_count;
+ *     method_info methods[methods_count];
+ *     u2 attributes_count;
+ *     attribute_info attributes[attributes_count];
+ * }
+ *
+ * methods_count:u2
  */
 public class MyTest {
 
