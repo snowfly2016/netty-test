@@ -233,7 +233,7 @@ package com.test.jvmbyte;
  * 具体字节码即是该方法被调用时，虚拟机所执行的字节码
  * exception_table 这里存放的是处理异常的信息
  * 每个exception_table表项有start_pc,end_pc,handler_pc,catch_type组成；
- *
+ * 非静态方法 this在字节码层面是通过参数传递的，每个方法都有一个局部变量this
  *
  */
 public class MyTest {
