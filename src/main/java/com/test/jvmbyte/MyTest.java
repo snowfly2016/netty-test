@@ -159,6 +159,22 @@ package com.test.jvmbyte;
  * 字节数据直接量：这是基本的数据类型。共细分为u1,u2,u4,u8四种，分别代表连续的1一个字节、2个字节、4个字节、8个字节组成的整体数据。
  * 表（数组）：表是由多个基本数据类型或其他表，按照既定顺序组成的大的数据集合。表是由结构的，它的结构体现在：组成表的成分所在的位置和顺序都是已经严格定义好的。
  *
+ * 上面表中描述了11种数据类型的结构，其实在jdk1.7之后有增加了3种，constant_methodHandle_info,constant_MethodType_info以及constant_InvokeDynamic_info，这样一共是14种；
+ *
+ * 访问标志信息包括该Class文件是类还是接口，是否被定义成public，是否是abstract,如果是类，是否被声明成final。
+ *
+ * 0x 00 21：是0X 00 20和0X 00 01的并集，表示acc_public与acc_super
+ *
+ * 字段表用于描述类和接口中声明的变量。这里的字段包含了类级别变量以及实例变量，但是不包括方法内部声明的局部变量
+ *
+ * field_info{
+ *     u2 access_flags;
+ *     u2 name_index;
+ *     u2 descriptor_index;
+ *     u2 attributes_count;
+ *     attributes_info attributes[attributes_count]
+ * }
+ *
  *
  * ClassFile{
  *     u4 magic;
@@ -179,6 +195,46 @@ package com.test.jvmbyte;
  * }
  *
  * methods_count:u2
+ * method_info{
+ *     ....
+ * }
+ *
+ * attribute_info{
+ *     u2
+ *     u2
+ *     u4
+ * }
+ *
+ * Code 方法执行代码
+ * JVM预定义了部分attribute,
+ *
+ * Code_attribute{
+ *     u2 attribute_name_index;
+ *     u2 attribute_length;
+ *     u2 max_stack;
+ *     u2 max_locals;
+ *     u4 code_length;
+ *     u1 code[code_length];
+ *     u2 exception_table_length;
+ *     {
+ *         u2 start_pc;
+ *         u2 end_pc;
+ *         u2 handler_pc;
+ *         u2 catch_type;
+ *     }exception_table[exception_table_length];
+ *     u2 attribute_count;
+ *     attribute_info attributes[attribute_count]
+ * }
+ *
+ * attribute_length表示attribute所包含的字节数，不包含attribute_name_index和attribute_length字段；
+ * max_stack表示这个方法运行的任何时刻所能达到的操作数栈的最大深度；
+ * max_locals表示方法执行期间创建的局部变量的数目，包含用来表示传入的参数的局部变量；
+ * code_length表示该方法所包含的字节码的字节数以及具体的指令码
+ * 具体字节码即是该方法被调用时，虚拟机所执行的字节码
+ * exception_table 这里存放的是处理异常的信息
+ * 每个exception_table表项有start_pc,end_pc,handler_pc,catch_type组成；
+ *
+ *
  */
 public class MyTest {
 
